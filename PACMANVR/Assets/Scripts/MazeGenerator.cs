@@ -3,7 +3,7 @@ using System.Collections;
 
 public class MazeGenerator : MonoBehaviour {
 
-	public GameObject cube;
+	public GameObject monster, player;
 	private int[,] matrix;  
 
 	// Use this for initialization
@@ -15,11 +15,17 @@ public class MazeGenerator : MonoBehaviour {
 	void Update () {
 	
 	}
+	// 0 for wall
+	// 1 for dots
+	// 2 for empty
+	// 3 for monster
+	// 4 for Big dots
+	// 5 for player
 
 	private void buildWall(){
 		matrix = new int[,] {
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-			{0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+			{0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 3, 0},
 			{0, 4, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 4, 0},
 			{0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0},
 			{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
@@ -27,10 +33,10 @@ public class MazeGenerator : MonoBehaviour {
 			{0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0},
 			{0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0},
 			{0, 2, 2, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 2, 2, 0},
-			{0, 1, 0, 0, 1, 0, 1, 0, 0, 3, 0, 0, 1, 0, 1, 0, 1, 0, 0},
-			{0, 2, 2, 2, 1, 1, 1, 0, 3, 3, 3, 0, 1, 1, 1, 2, 2, 2, 0},
+			{0, 1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 0, 1, 0, 0},
+			{0, 2, 2, 2, 1, 1, 1, 0, 1, 3, 1, 0, 1, 1, 1, 2, 2, 2, 0},
 			{0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0},
-			{0, 2, 2, 0, 1, 0, 1, 1, 1, 2, 1, 1, 1, 0, 1, 0, 2, 2, 0},
+			{0, 2, 2, 0, 1, 0, 1, 1, 1, 5, 1, 1, 1, 0, 1, 0, 2, 2, 0},
 			{0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0},
 			{0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 			{0, 1, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0},
@@ -38,7 +44,7 @@ public class MazeGenerator : MonoBehaviour {
 			{0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0},
 			{0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 0, 1, 1, 1, 1, 0},
 			{0, 1, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 1, 0},
-			{0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
+			{0, 3, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0},
 			{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 		};
 
@@ -46,8 +52,16 @@ public class MazeGenerator : MonoBehaviour {
 		{
 			for (int z = 0; z <= 18; z++)
 			{
-				if (matrix[x,z] == 0)
-					Instantiate(cube, new Vector3(x-11, 0.5f, z-10), Quaternion.identity);
+				if(matrix[x,z] == 5)
+					Instantiate(player, new Vector3(x-11, 0f, z-10), Quaternion.identity);
+			}
+		}
+		for (int x = 0; x <= 21; x++)
+		{
+			for (int z = 0; z <= 18; z++)
+			{
+				if(matrix[x,z] == 3)
+					Instantiate(monster, new Vector3(x-11, 0f, z-10), Quaternion.identity);
 			}
 		}
 	}
