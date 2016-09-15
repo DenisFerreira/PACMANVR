@@ -3,18 +3,17 @@ using System.Collections;
 
 public class EnemyMovement : MonoBehaviour
 {
-    Transform player;
-    //PlayerHealth playerHealth;
-    //EnemyHealth enemyHealth;
-    NavMeshAgent nav;
-	AudioSource audio;
+	public float wanderRadius;
+	private float timer, wanderTimer = 1;
+	private Transform player;
+	private NavMeshAgent agent;
+	private AudioSource audio;
 
     void Awake ()
     {
+		timer = wanderTimer;
         player = GameObject.FindGameObjectWithTag ("Player").transform;
-        //playerHealth = player.GetComponent <PlayerHealth> ();
-        //enemyHealth = GetComponent <EnemyHealth> ();
-        nav = GetComponent <NavMeshAgent> ();
+        agent = GetComponent <NavMeshAgent> ();
 		audio = GetComponent<AudioSource> ();
 		InvokeRepeating ("playAudio", 1, Random.Range(5f, 30f));
     }
@@ -25,13 +24,23 @@ public class EnemyMovement : MonoBehaviour
 
     void Update ()
     {
-        //if(enemyHealth.currentHealth > 0 && playerHealth.currentHealth > 0)
-        //{
-            nav.SetDestination (player.position);
-        //}
-        //else
-        //{
-        //    nav.enabled = false;
-        //}
+		timer += Time.deltaTime;
+		if (timer >= wanderTimer) {
+			if (Vector3.Distance (player.position, transform.position) > 5) {
+				Vector3 newPos = RandomNavSphere (player.position, wanderRadius);
+				agent.SetDestination (newPos);
+				timer = 0;
+			}
+			else
+				agent.SetDestination (player.position);
+		}
     }
+
+	public static Vector3 RandomNavSphere(Vector3 origin, float dist) {
+		Vector3 randDirection = Random.insideUnitSphere * dist;
+		randDirection += origin;
+		NavMeshHit navHit;
+		NavMesh.SamplePosition (randDirection, out navHit, dist, NavMesh.AllAreas);
+		return navHit.position;
+	}
 }
