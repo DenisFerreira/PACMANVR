@@ -5,14 +5,15 @@ public class EnemyMovement : MonoBehaviour
 {
 	public float wanderRadius;
 	private float timer, wanderTimer = 1;
-	private Transform player;
+	private Transform playerTransform;
 	private NavMeshAgent agent;
 	private AudioSource audio;
+	private GameController gameController;
 
     void Awake ()
     {
 		timer = wanderTimer;
-        player = GameObject.FindGameObjectWithTag ("Player").transform;
+		playerTransform = GameObject.FindGameObjectWithTag ("Player").transform;
         agent = GetComponent <NavMeshAgent> ();
 		audio = GetComponent<AudioSource> ();
 		InvokeRepeating ("playAudio", 1, Random.Range(5f, 30f));
@@ -26,13 +27,13 @@ public class EnemyMovement : MonoBehaviour
     {
 		timer += Time.deltaTime;
 		if (timer >= wanderTimer) {
-			if (Vector3.Distance (player.position, transform.position) > 5) {
-				Vector3 newPos = RandomNavSphere (player.position, wanderRadius);
+			if (Vector3.Distance (playerTransform.position, transform.position) > 5) {
+				Vector3 newPos = RandomNavSphere (playerTransform.position, wanderRadius);
 				agent.SetDestination (newPos);
 				timer = 0;
 			}
 			else
-				agent.SetDestination (player.position);
+				agent.SetDestination (playerTransform.position);
 		}
     }
 
