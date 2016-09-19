@@ -27,8 +27,7 @@ public class GameController : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (!magnetDetectionEnabled) return;
-		if (CardboardMagnetSensor.CheckIfWasClicked()) {
-			Debug.Log("DO SOMETHING HERE");
+		if (CardboardMagnetSensor.CheckIfWasClicked() || Input.GetMouseButtonDown(0)) {
 			if (!isStarted)
 				PlayGame ();
 			else if (playerObj.canRestartGame())
