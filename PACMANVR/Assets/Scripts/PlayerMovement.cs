@@ -43,15 +43,19 @@ public class PlayerMovement : MonoBehaviour {
 	}
 
 	void GameOver() {
-		canRestart = true;
-		currentSpeed = 0;
-		gameStatus.text = "Game Over! \nClick to Restart.";
+		if (!canRestart) {
+			canRestart = true;
+			currentSpeed = 0;
+			gameStatus.text = "Game Over! \nClick to Restart.";
+		}
 	}
 
 	void GameWon() {
-		canRestart = true;
-		currentSpeed = 0;
-		gameStatus.text = "Game Won! \nClick to Restart.";
+		if (!canRestart) {
+			canRestart = true;
+			currentSpeed = 0;
+			gameStatus.text = "Game Won! \nClick to Restart.";
+		}
 	}
 
 	public bool canRestartGame(){

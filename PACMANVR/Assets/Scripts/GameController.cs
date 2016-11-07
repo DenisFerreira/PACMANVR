@@ -9,6 +9,7 @@ public class GameController : MonoBehaviour {
 	private bool magnetDetectionEnabled = true;
 	private PlayerMovement playerObj;
 	private bool isStarted;
+	private ArrayList instantiatedMonsters = new ArrayList();
 
 	// Use this for initialization
 	void Start () {
@@ -34,16 +35,19 @@ public class GameController : MonoBehaviour {
 				RestartGame ();
 			CardboardMagnetSensor.ResetClick();
 		}
+		if (playerObj.canRestartGame ())
+			StopMonsters ();
 	}
 
 	void SpawnMonsters(){
 		ArrayList usedValues = new ArrayList ();
+
 		foreach (GameObject spawn in GameObject.FindGameObjectsWithTag("SpawnMonster")) {
 			int random = Random.Range (0, monsters.Length);
 			while(usedValues.Contains(random))
 				random = Random.Range (0, monsters.Length);
 			usedValues.Add (random);
-			Instantiate (monsters [random], spawn.transform.position, Quaternion.identity);
+			instantiatedMonsters.Add( Instantiate (monsters [random], spawn.transform.position, Quaternion.identity) as GameObject);
 		}
 	}
 
@@ -56,5 +60,11 @@ public class GameController : MonoBehaviour {
 	void RestartGame() {
 		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 	}
+
+	public void StopMonsters() {
+		foreach (GameObject monster in instantiatedMonsters) {
+			monster.GetComponent<NavMeshAgent> ().speed = 0;
+		}
+	} 
 		
 }
