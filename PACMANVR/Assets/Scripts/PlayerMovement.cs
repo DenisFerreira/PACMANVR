@@ -27,10 +27,14 @@ public class PlayerMovement : MonoBehaviour {
 
 	void OnCollisionEnter (Collision col)
 	{
-		if(col.gameObject.tag == "Enemy")
-		{
-			GameOver();
+		if (col.gameObject.tag == "Enemy") {
+			GameOver ();
+		} else if ((col.gameObject.tag == "Chest") || (col.gameObject.tag == "GoldChest")) {
+			col.gameObject.GetComponent<AnimateChest> ().OpenChest ();
+			if((col.gameObject.tag == "GoldChest"))
+				GameWon ();
 		}
+
 	}
 
 	public void Play(){
@@ -44,7 +48,14 @@ public class PlayerMovement : MonoBehaviour {
 		gameStatus.text = "Game Over! \nClick to Restart.";
 	}
 
+	void GameWon() {
+		canRestart = true;
+		currentSpeed = 0;
+		gameStatus.text = "Game Won! \nClick to Restart.";
+	}
+
 	public bool canRestartGame(){
 		return canRestart;
 	}
+		
 }
